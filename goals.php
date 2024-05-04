@@ -8,7 +8,7 @@ if (!isset($_SESSION["user"])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Workouts Page</title>
+    <title>Goals Page</title>
     <style>
         body {
             margin: 0;
@@ -25,18 +25,18 @@ if (!isset($_SESSION["user"])) {
             background-color: #f2f2f2;
         }
         
-        .workout-details {
+        .goal-details {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
-        .workout-details h2 {
+        .goal-details h2 {
             margin-top: 0;
         }
         
-        .workout-details p {
+        .goal-details p {
             margin-bottom: 10px;
         }
     </style>
@@ -72,28 +72,26 @@ if (!isset($_SESSION["user"])) {
             </div>
         </nav>
 <div class="container">
-        <div class="workout-details">
-            <!-- Your existing HTML code -->
+        <div class="goal-details">
 
-            <!-- Add a form to accept user input -->
             <?php
             $x=$_SESSION["user"][1];
             if (isset($_POST["submit"])) {
-           $workout_date = $_POST["workout_date"];
-           $workout_type = $_POST["workout_type"];
-           $duration = $_POST["duration"];
-           $calories_burnt = $_POST["calories_burnt"];
-           $distance = $_POST["distance"];
+           $goal_type = $_POST["goal_type"];
+           $target_weight = $_POST["target_weight"];
+           $start_date = $_POST["start_date"];
+           $end_date = $_POST["end_date"];
+           $archieved = $_POST["archieved"];
            
            require_once "database.php";
-           $sql = "SELECT * FROM workouts WHERE id = '$x'";
+           $sql = "SELECT * FROM goals WHERE id = '$x'";
            $result = mysqli_query($conn, $sql);
            $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
-           $sql = "INSERT INTO workouts (id,workout_date, workout_type, duration, calories_burnt, distance) VALUES (?, ?, ?, ?, ?, ?)";
+           $sql = "INSERT INTO goals (id, goal_type, target_weight, start_date, end_date, archieved) VALUES (?, ?, ?, ?, ?, ?)";
            $stmt = mysqli_stmt_init($conn);
            $prepareStmt = mysqli_stmt_prepare($stmt,$sql);
            if ($prepareStmt) {
-               mysqli_stmt_bind_param($stmt,"ssssss",$x,$workout_date, $workout_type, $duration, $calories_burnt, $distance);
+               mysqli_stmt_bind_param($stmt,"ssssss",$x,$goal_type, $target_weight, $start_date, $end_date, $archieved);
                mysqli_stmt_execute($stmt);
                echo "<div class='alert alert-success'>You have successfully entered.</div>";
            }else{
@@ -103,19 +101,19 @@ if (!isset($_SESSION["user"])) {
         
         ?>
             <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <h2>Enter Workout Details</h2>
-                <input type="text" name="workout_date" placeholder="Workout Date" required>
-                <input type="text" name="workout_type" placeholder="Workout Type" required>
-                <input type="text" name="duration" placeholder="Duration" required>
-                <input type="text" name="calories_burnt" placeholder="Calories Burnt" required>
-                <input type="text" name="distance" placeholder="Distance" required>
+                <h2>Enter Goal Details</h2>
+                <input type="text" name="goal_type" placeholder="Goal Type" required>
+                <input type="text" name="target_weight" placeholder="Target Weight" required>
+                <input type="text" name="start_date" placeholder="Start Date" required>
+                <input type="text" name="end_date" placeholder="End Date" required>
+                <input type="text" name="archieved" placeholder="Achieved" required>
                 <button type="submit" name="submit">Submit</button>
             </form>
         </div>
     </div>
     <?php
 
-    $sql = "SELECT workout_date, workout_type, duration, calories_burnt, distance FROM workouts where id='$x'";
+    $sql = "SELECT goal_type, target_weight, start_date, end_date, archieved FROM goals where id='$x'";
     $conn = new mysqli("localhost", "root", "", "login");
     $ans = $conn->query($sql);
     
@@ -123,12 +121,12 @@ if (!isset($_SESSION["user"])) {
     if ($ans->num_rows > 0) {
         // Output data of each row
         while($row = $ans->fetch_assoc()) {
-            echo "Workout Date: " . $row["workout_date"]. "<br>";
-            echo "Workout Type: " . $row["workout_type"]. "<br>";
-            echo "Duration: " . $row["duration"]. "<br>";
-            echo "Calories: " . $row["calories_burnt"]. "<br>";
-            echo "Distance: " . $row["distance"]. "<br>";
-            echo "<hr>"; // Add a horizontal line between each workout for better readability
+            echo "Goal Type: " . $row["goal_type"]. "<br>";
+            echo "Target Weight: " . $row["target_weight"]. "<br>";
+            echo "Start Date: " . $row["start_date"]. "<br>";
+            echo "End Date: " . $row["end_date"]. "<br>";
+            echo "Achieved: " . $row["archieved"]. "<br>";
+            echo "<hr>"; 
         }
     } else {
         echo "No data found";

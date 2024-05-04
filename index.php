@@ -28,13 +28,13 @@ if (!isset($_SESSION["user"])) {
                             <a class="nav-link" href="workouts.php">Workouts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Diet</a>
+                            <a class="nav-link" href="diet.php">Diet</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Goals</a>
+                            <a class="nav-link" href="goals.php">Goals</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Body Measurements</a>
+                            <a class="nav-link" href="user_details.php">User Details</a>
                         </li>
                         <li class="align-items-end">
                             <a href="logout.php" class="btn btn-warning">Logout</a>
@@ -44,11 +44,46 @@ if (!isset($_SESSION["user"])) {
             </div>
         </nav>
     <div class="container">
-        <h1>Welcome to Dashboard</h1>
-        <?php
-        // include "login.php";
-        echo $_SESSION["user"][1];
-        ?>
+        <h1>Welcome <?php echo $_SESSION["user"][2]?></h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Track Your Workouts</h5>
+                        <p class="card-text">Stay motivated and keep track of your workouts with our easy-to-use fitness tracker.</p>
+                        <a href="workouts.php" class="btn btn-light">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Your Diet</h5>
+                        <p class="card-text">Take control of your nutrition and manage your diet effectively with our diet tracking feature.</p>
+                        <a href="diet.php" class="btn btn-light">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
        
+    <?php
+    // Generate a random quote
+    $quotes = [
+        "The only way to do great work is to love what you do. - Steve Jobs",
+        "Success is not the key to happiness. Happiness is the key to success. - Albert Schweitzer",
+        "Believe you can and you're halfway there. - Theodore Roosevelt",
+        "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+        "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt"
+    ];
+    $randomQuote = $quotes[array_rand($quotes)];
+    ?>
+           
+    <div class="container">
+        <blockquote class="blockquote text-center">
+            <p class="mb-0"><?php echo $randomQuote; ?></p>
+        </blockquote>
+    </div>
+
 </body>
 </html>

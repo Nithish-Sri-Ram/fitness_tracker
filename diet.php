@@ -8,7 +8,7 @@ if (!isset($_SESSION["user"])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Workouts Page</title>
+    <title>Diet Page</title>
     <style>
         body {
             margin: 0;
@@ -25,18 +25,18 @@ if (!isset($_SESSION["user"])) {
             background-color: #f2f2f2;
         }
         
-        .workout-details {
+        .diet-details {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
-        .workout-details h2 {
+        .diet-details h2 {
             margin-top: 0;
         }
         
-        .workout-details p {
+        .diet-details p {
             margin-bottom: 10px;
         }
     </style>
@@ -72,50 +72,50 @@ if (!isset($_SESSION["user"])) {
             </div>
         </nav>
 <div class="container">
-        <div class="workout-details">
-            <!-- Your existing HTML code -->
-
-            <!-- Add a form to accept user input -->
+        <div class="diet-details">
             <?php
             $x=$_SESSION["user"][1];
             if (isset($_POST["submit"])) {
-           $workout_date = $_POST["workout_date"];
-           $workout_type = $_POST["workout_type"];
-           $duration = $_POST["duration"];
-           $calories_burnt = $_POST["calories_burnt"];
-           $distance = $_POST["distance"];
+           $log_date = $_POST["log_date"];
+           $meal_type = $_POST["meal_type"];
+           $food_item = $_POST["food_item"];
+           $calories_consumed = $_POST["calories_consumed"];
+           $protein = $_POST["protein"];
+           $carbs = $_POST["carbs"];
+           $fats = $_POST["fats"];
            
            require_once "database.php";
-           $sql = "SELECT * FROM workouts WHERE id = '$x'";
+           $sql = "SELECT * FROM diet WHERE id = '$x'";
            $result = mysqli_query($conn, $sql);
            $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
-           $sql = "INSERT INTO workouts (id,workout_date, workout_type, duration, calories_burnt, distance) VALUES (?, ?, ?, ?, ?, ?)";
+           $sql = "INSERT INTO diet (id, log_date, meal_type, food_item, calories_consumed, protein, carbs, fats) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
            $stmt = mysqli_stmt_init($conn);
            $prepareStmt = mysqli_stmt_prepare($stmt,$sql);
            if ($prepareStmt) {
-               mysqli_stmt_bind_param($stmt,"ssssss",$x,$workout_date, $workout_type, $duration, $calories_burnt, $distance);
+               mysqli_stmt_bind_param($stmt,"ssssssss",$x,$log_date, $meal_type, $food_item, $calories_consumed, $protein, $carbs, $fats);
                mysqli_stmt_execute($stmt);
                echo "<div class='alert alert-success'>You have successfully entered.</div>";
            }else{
                die("Something went wrong");
            }
             }
-        
         ?>
             <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <h2>Enter Workout Details</h2>
-                <input type="text" name="workout_date" placeholder="Workout Date" required>
-                <input type="text" name="workout_type" placeholder="Workout Type" required>
-                <input type="text" name="duration" placeholder="Duration" required>
-                <input type="text" name="calories_burnt" placeholder="Calories Burnt" required>
-                <input type="text" name="distance" placeholder="Distance" required>
+                <h2>Enter Diet Details</h2>
+                <input type="text" name="log_date" placeholder="Log Date" required>
+                <input type="text" name="meal_type" placeholder="Meal Type" required>
+                <input type="text" name="food_item" placeholder="Food Item" required>
+                <input type="text" name="calories_consumed" placeholder="Calories Consumed" required>
+                <input type="text" name="protein" placeholder="Protein" required>
+                <input type="text" name="carbs" placeholder="Carbs" required>
+                <input type="text" name="fats" placeholder="Fats" required>
                 <button type="submit" name="submit">Submit</button>
             </form>
         </div>
     </div>
     <?php
 
-    $sql = "SELECT workout_date, workout_type, duration, calories_burnt, distance FROM workouts where id='$x'";
+    $sql = "SELECT log_date, meal_type, food_item, calories_consumed, protein, carbs, fats FROM diet where id='$x'";
     $conn = new mysqli("localhost", "root", "", "login");
     $ans = $conn->query($sql);
     
@@ -123,12 +123,14 @@ if (!isset($_SESSION["user"])) {
     if ($ans->num_rows > 0) {
         // Output data of each row
         while($row = $ans->fetch_assoc()) {
-            echo "Workout Date: " . $row["workout_date"]. "<br>";
-            echo "Workout Type: " . $row["workout_type"]. "<br>";
-            echo "Duration: " . $row["duration"]. "<br>";
-            echo "Calories: " . $row["calories_burnt"]. "<br>";
-            echo "Distance: " . $row["distance"]. "<br>";
-            echo "<hr>"; // Add a horizontal line between each workout for better readability
+            echo "Log Date: " . $row["log_date"]. "<br>";
+            echo "Meal Type: " . $row["meal_type"]. "<br>";
+            echo "Food Item: " . $row["food_item"]. "<br>";
+            echo "Calories Consumed: " . $row["calories_consumed"]. "<br>";
+            echo "Protein: " . $row["protein"]. "<br>";
+            echo "Carbs: " . $row["carbs"]. "<br>";
+            echo "Fats: " . $row["fats"]. "<br>";
+            echo "<hr>"; 
         }
     } else {
         echo "No data found";
